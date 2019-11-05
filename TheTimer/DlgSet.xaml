@@ -1,0 +1,28 @@
+﻿<Window x:Class="TheTimer.DlgSet"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TheTimer"
+         xmlns:timeControlBehavior="clr-namespace:TheTimer.TimeControlBehavior"
+       mc:Ignorable="d"
+        Title="DlgSet" Height="300" Width="400">
+    <Grid>
+        <TextBox 
+            Name="TimeTextBox"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="56"
+            Height="82" 
+            Width="143"
+            Margin="134,41,115,146" 
+            TextWrapping="Wrap" 
+            timeControlBehavior:TimeSpanTextBoxBehaviour.MaxTime="23:59:59"
+            timeControlBehavior:TimeSpanTextBoxBehaviour.TimeFormat="Minutes"
+            timeControlBehavior:TimeSpanTextBoxBehaviour.Value="{Binding ElementName=TimeTextBlock, Path=Text, Mode=OneWayToSource}"  
+            />
+        <Button IsEnabled="True" Content="Cancel" HorizontalAlignment="Left" Margin="33,176,0,0" VerticalAlignment="Top" Width="143" Click="OnBtnCancel" Height="55"/>
+        <Button IsEnabled="{Binding HasChanges}" Content="Apply" HorizontalAlignment="Left" Margin="226,176,0,0" VerticalAlignment="Top" Width="143" Click="OnBtnApply" Height="55"/>
+        <TextBlock Name="TimeTextBlock" Text="{Binding DurationString, Mode=TwoWay}" Visibility="Visible" HorizontalAlignment="Left" Height="16" Margin="134,139,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="91"/>
+    </Grid>
+</Window>

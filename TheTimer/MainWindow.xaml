@@ -1,0 +1,239 @@
+﻿<Window x:Class="TheTimer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TheTimer"
+        mc:Ignorable="d"
+        Title="The Timer" Height="650" Width="800" MinHeight="650" MinWidth="400">
+
+    <Window.Resources>
+        <!--Groups and borders-->
+        <Style x:Key="MainViewContentSelector_Hover" TargetType="{x:Type GroupBox}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0.9" EndPoint="1,0.1">
+                        <GradientStop Offset="0" Color="LightGray" />
+                        <GradientStop Offset="0.8" Color="White" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush" Value="LightGray" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+
+        <Style x:Key="MainViewContentSelector_Leave" TargetType="{x:Type GroupBox}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0.9" EndPoint="1,0.1">
+                        <GradientStop Offset="0" Color="LightGray" />
+                        <GradientStop Offset="1" Color="White" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush" Value="Gray" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+
+        <Style x:Key="MainViewContentSelector_Itself" TargetType="{x:Type GroupBox}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0.1">
+                        <GradientStop Offset="0" Color="White" />
+                        <GradientStop Offset="1" Color="LightGray" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush" Value="Gray" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+
+        <Style TargetType="{x:Type DataGrid}">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="BorderBrush" Value="Gray" />
+            <Setter Property="VerticalGridLinesBrush" Value="LightGray" />
+            <Setter Property="HorizontalGridLinesBrush" Value="LightGray" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="HorizontalContentAlignment" Value="Right" />
+            <Setter Property="CanUserSortColumns" Value="False" />
+            <Setter Property="CanUserReorderColumns" Value="False" />
+            <Setter Property="CanUserResizeRows" Value="False" />
+            <Setter Property="CanUserResizeColumns" Value="False" />
+            <Setter Property="SelectionUnit" Value="FullRow" />
+            <Setter Property="SelectionMode" Value="Single" />
+            <Setter Property="RowHeaderWidth" Value="16" />
+        </Style>
+
+        <Style TargetType="{x:Type DataGridRow}">
+            <EventSetter Event="MouseLeftButtonDown" Handler="OnDataGridRowMouseLeftButtonDown" />
+            <!--<Setter Property="Background" Value="White" />-->
+            <Setter Property="FontWeight" Value="Normal" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+
+                    <!--<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>-->
+                    <Setter Property="Background" Value="DarkSlateBlue"/>
+                    <Setter Property="Foreground" Value="White"/>
+
+                    <Setter Property="FontWeight" Value="Medium" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type DataGridCell}">
+            <EventSetter Event="Selected" Handler="OnDataGridCellSelected" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <!--<Setter Property="Focusable" Value="False" /> Если это раскомментарить, то нельзя будет редактировать клетки таблиц-->
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
+            <Setter Property="FontWeight" Value="Normal" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>-->
+                    <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static Colors.LightYellow}}"/>-->
+                    <Setter Property="Background" Value="DarkSlateBlue"/>
+                    <Setter Property="BorderBrush" Value="DarkSlateBlue"/>
+                    <Setter Property="Foreground" Value="Yellow"/>
+                    <Setter Property="FontWeight" Value="Medium" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <local:ValueToBrushConverter x:Key="ValueToBrushConverter"/>
+        <Style x:Key="CellStyle" TargetType="DataGridCell">
+            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource ValueToBrushConverter}}" />
+            <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource ValueToBrushConverter}}" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
+                    <!--<Setter Property="FontWeight" Value="Medium" />-->
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="RowStyle" TargetType="DataGridRow">
+            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource ValueToBrushConverter}}" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+        </Style>
+
+    </Window.Resources>
+
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom" Name="sbMain">
+            <StatusBarItem>
+                <TextBlock Name="sbiStateName" Text="State"></TextBlock>
+            </StatusBarItem>
+            <StatusBarItem>
+                <ProgressBar Name="sbiProgress" Width="100" Height="12" Maximum="100" Visibility="Hidden">
+                </ProgressBar>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Name="sbiSpring" Text="" Width="Auto"></TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+
+        <Grid Name="parentGrid" Grid.IsSharedSizeScope="True">
+
+            <Grid Name="layer0">
+                <!-- Define four rows: -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="80" MaxHeight="80" />
+                    <RowDefinition Height="80" MaxHeight="80" />
+                    <RowDefinition Height="80" MaxHeight="80" />
+                    <RowDefinition Height="80" MaxHeight="80" />
+                    <RowDefinition Height="80" MaxHeight="80" />
+                    <RowDefinition Height="80" MaxHeight="80" />
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="80*" MaxHeight="80" />
+                </Grid.RowDefinitions>
+
+                <!-- Define two columns: -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Name="firstColumn" Width="80"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!-- MainView Content Selectors -->
+                <GroupBox Name="btnRun" Header="Play" Grid.Row="1" Grid.Column="0" Style="{StaticResource MainViewContentSelector_Leave}">
+                    <!--<GroupBox.Header>
+                        <RadioButton GroupName="MainViewContentSelector" Name="chkRun" Content="Play"/>
+                    </GroupBox.Header>-->
+                    <Image Source="Images/Btn_Run_Gray.png" Height="32" Name="imgRun"/>
+                </GroupBox>
+                <GroupBox Name="btnPau" Header="Pause" Grid.Row="2" Grid.Column="0" Style="{StaticResource MainViewContentSelector_Leave}">
+                    <!--<GroupBox.Header>
+                        <RadioButton GroupName="MainViewContentSelector" Name="chkPau" Content="Pause"/>
+                    </GroupBox.Header>-->
+                    <Image Source="Images/Btn_Pau_Gray.png" Height="32" Name="ImgPau" />
+                </GroupBox>
+                <GroupBox Name="btnStp" Header="Stop" Grid.Row="3" Grid.Column="0" Style="{StaticResource MainViewContentSelector_Leave}">
+                    <!--<GroupBox.Header>
+                        <RadioButton GroupName="MainViewContentSelector" Name="chkStp" Content="Stop"/>
+                    </GroupBox.Header>-->
+                    <Image Source="Images/Btn_Stp_Gray.png" Height="32" Name="ImgStp" />
+                </GroupBox>
+                <GroupBox Name="btnRst" Grid.Row="4" Grid.Column="0" Style="{StaticResource MainViewContentSelector_Leave}" Header="Restart">
+                    <Image Source="Images/Btn_Rst_Gray.png" Height="32" Name="ImgRst" />
+                </GroupBox>
+                <GroupBox Name="btnSet" Grid.Row="5" Grid.Column="0" Style="{StaticResource MainViewContentSelector_Leave}" Header="Set time">
+                    <Image Source="Images/Btn_Tim_Gray.png" Height="32" Name="ImgSet" />
+                </GroupBox>
+                <GroupBox Name="btnCfg" Grid.Row="6" Grid.Column="0" Style="{StaticResource MainViewContentSelector_Leave}" Header="Configure">
+                    <Image Source="Images/Btn_Tlz_Gray.png" Height="32" Name="ImgCfg" />
+                </GroupBox>
+                <GroupBox Name="btnEsc" Grid.Row="8" Grid.Column="0" Style="{StaticResource MainViewContentSelector_Leave}" Header="Exit">
+                    <Image Source="Images/Btn_Exit_Red.png" Height="32" Name="ImgEsc" />
+                </GroupBox>
+
+                <GroupBox Name="wndMainView" Grid.Row="1" Grid.Column="1" Grid.RowSpan="8" Style="{StaticResource MainViewContentSelector_Itself}" 
+                                                
+                          >
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Images/Btn_Tim.png" Name="imgHdr" Height="8" Margin="2"/>
+                            <TextBlock Text="Group 1" Name="txtHdr" Margin="2"/>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Viewbox Grid.Row="0"  Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="col"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!--<Image Source="Images/Btn_Go.png" Height="16"/>-->
+                                <TextBlock Name="txTimer" Grid.Column="0" Text="{Binding DurationString, Mode=OneWay}" FontWeight="Bold" />
+
+                            </Grid>
+                        </Viewbox>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </Grid>
+
+    </DockPanel>
+
+</Window>
