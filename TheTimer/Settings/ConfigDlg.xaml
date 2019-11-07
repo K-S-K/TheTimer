@@ -1,0 +1,15 @@
+﻿<Window x:Class="TheTimer.Settings.ConfigDlg"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TheTimer.Settings"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        Title="The Timer Configuration" Height="160" Width="320">
+    <Grid>
+        <CheckBox IsChecked="{Binding TrueFullScreenMode}" Content="TrueFullScreenMode" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,16,0,0"/>
+        <Button IsEnabled="{Binding Modifyed}" Content="Apply" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="75" Height="24" Click="OnBtnApp" />
+        <Button IsEnabled="True" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Height="24" Click="OnBtnEsc" IsCancel="True" />
+    </Grid>
+</Window>

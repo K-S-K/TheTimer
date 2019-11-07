@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+using System.Threading;
+using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 using TheTimer.Timer;
+using TheTimer.Settings;
 
 namespace TheTimer
 {
@@ -25,6 +18,7 @@ namespace TheTimer
     public partial class MainWindow : Window
     {
         #region -> Data
+        private bool IsFullScreenNow;
 
         private object sync_sw;
         private Style styleHover;
@@ -38,6 +32,8 @@ namespace TheTimer
         private DataToSet _timerSet;
         private TimerItself _timerItem;
         private TimerViewData _timerViewData;
+
+        private readonly Config _config;
         #endregion
 
 
@@ -223,6 +219,26 @@ namespace TheTimer
 
             firstColumn.Width = new GridLength(bShow ? 80 : 0);
             this.WindowStyle = bShow ? WindowStyle.SingleBorderWindow : WindowStyle.None;
+
+            if (_config.TrueFullScreenMode)
+            {
+                this.WindowState = bShow ? WindowState.Normal : WindowState.Maximized;
+
+                if (bShow)
+                {
+                    Topmost = false;
+                }
+                else
+                {
+                    Topmost = true;
+                    IsFullScreenNow = true;
+                }
+            }
+
+            if (bShow)
+            {
+                IsFullScreenNow = false;
+            }
         }
 
         private void OnBtnPause()
@@ -276,7 +292,14 @@ namespace TheTimer
 
         private void OnBtnCfg()
         {
-            // TODO
+            ConfigDlg dlg = new ConfigDlg(_config) { Owner = this };
+
+            bool? DR = dlg.ShowDialog();
+
+            if (DR == null || !DR.Value) { return; }
+
+            _config.XContent = dlg.Config.XContent;
+            _config.SaveProgramConfigToRegistry();
         }
 
         private void OnBtnEsc()
@@ -407,6 +430,10 @@ namespace TheTimer
         #region -> Ctor
         public MainWindow()
         {
+            _config = new Config();
+            _config.LoadProgramConfigFromRegistry();
+
+
             _timerSet = new DataToSet();
             _timerItem = new TimerItself();
             _timerViewData = new TimerViewData();
@@ -514,7 +541,6 @@ namespace TheTimer
             new Thread(delegate () { BackWaitingWatchDog(); }) { IsBackground = true }.Start();
 
             Loaded += MainWindow_Loaded;
-
         }
 
         private void WndMainView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

@@ -60,6 +60,10 @@
     <Compile Include="DlgSet.xaml.cs">
       <DependentUpon>DlgSet.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\Config.cs" />
+    <Compile Include="Settings\ConfigDlg.xaml.cs">
+      <DependentUpon>ConfigDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimeControlBehavior\TimeSpanTextBoxBehaviour.cs" />
     <Compile Include="Timer\Enum_TimerState.cs" />
     <Compile Include="Timer\TimerItself.cs" />
@@ -81,6 +85,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Settings\ConfigDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
