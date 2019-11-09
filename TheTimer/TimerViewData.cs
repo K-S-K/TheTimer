@@ -30,13 +30,13 @@ namespace TheTimer
                 UpdateProperty("Duration");
                 UpdateProperty("DurationString");
 
-                if (_duration < TimeSpan.FromMinutes(1))
-                {
-                    StringColor = System.Windows.Media.Brushes.OrangeRed;
-                }
-                else if (_duration == TimeSpan.Zero)
+                if (_duration < TimeSpan.FromSeconds(1))
                 {
                     StringColor = System.Windows.Media.Brushes.Red;
+                }
+                else if (_duration < TimeSpan.FromMinutes(1))
+                {
+                    StringColor = System.Windows.Media.Brushes.OrangeRed;
                 }
                 else
                 {
