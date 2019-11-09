@@ -255,12 +255,32 @@ namespace TheTimer.TimeControlBehavior
 
         private void ChangeValueDependingOnLocaton(int amount)
         {
-            var selectionStart = _textBox.SelectionStart;
-            var addValue = (_formatString[selectionStart] != _formatString[selectionStart + 1]
-                    ? 1 : (_formatString[selectionStart] != _formatString[selectionStart + 2])
-                    ? 10 : 100) * amount;
+            int selectionBeg = _textBox.SelectionStart;
+            int selectionLim = _formatString.Length - 1;
+            if (selectionBeg > selectionLim) return;
+            double addValue;
+
+            char fs0 = ' '; fs0 = _formatString[selectionBeg];
+            char fs1 = ' '; if (selectionBeg + 1 < selectionLim) fs1 = _formatString[selectionBeg + 1];
+            char fs2 = ' '; if (selectionBeg + 2 < selectionLim) fs2 = _formatString[selectionBeg + 2];
+
+            if (fs0 != fs1)
+            {
+                addValue = 1;
+            }
+            else if (fs0 != fs2)
+            {
+                addValue = 10;
+            }
+            else
+            {
+                addValue = 100;
+            }
+
+            addValue *= amount;
+
             var currentTimeSpan = TimeSpanParse(_textBox.Text, _timerFormat == TimerFormats.Minutes);
-            switch (_formatString[selectionStart])
+            switch (fs0)
             {
                 case 'm':
                     currentTimeSpan = currentTimeSpan.Add(TimeSpan.FromMinutes(addValue));
@@ -280,7 +300,7 @@ namespace TheTimer.TimeControlBehavior
             if (currentTimeSpan < TimeSpan.Zero) currentTimeSpan = TimeSpan.Zero;
             SetValue(_textBox, currentTimeSpan);
             _textBox.Text = TimeSpanFormat(currentTimeSpan, _formatString);
-            _textBox.SelectionStart = selectionStart;
+            _textBox.SelectionStart = selectionBeg;
         }
 
         #region Dependency Property change handlers for instance
