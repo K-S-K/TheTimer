@@ -18,8 +18,6 @@ namespace TheTimer
     public partial class MainWindow : Window
     {
         #region -> Data
-        private bool IsFullScreenNow;
-
         private object sync_sw;
         private Style styleHover;
         private Style styleLeave;
@@ -173,13 +171,6 @@ namespace TheTimer
 
         private void OnBtnClick(Image img)
         {
-            // if (img == null) 
-            return;
-
-            if (img == imgRun) { OnBtnClick(btnRun); }
-            if (img == ImgPau) { OnBtnClick(btnPau); }
-            if (img == ImgStp) { OnBtnClick(btnStp); }
-            // if (img == ImgRst) { OnBtnClick(btnRst); }
         }
 
 
@@ -204,41 +195,6 @@ namespace TheTimer
             if (gb == btnEsc) { OnBtnEsc(); }
 
             gbFocused = gb;
-        }
-
-        private void ToggleSurroundVisability()
-        {
-            bool bShow = sbMain.Visibility != Visibility.Visible;
-
-            ToggleSurroundVisability(bShow);
-        }
-
-        private void ToggleSurroundVisability(bool bShow)
-        {
-            sbMain.Visibility = bShow ? Visibility.Visible : Visibility.Collapsed;
-
-            firstColumn.Width = new GridLength(bShow ? 80 : 0);
-            this.WindowStyle = bShow ? WindowStyle.SingleBorderWindow : WindowStyle.None;
-
-            if (_config.TrueFullScreenMode)
-            {
-                this.WindowState = bShow ? WindowState.Normal : WindowState.Maximized;
-
-                if (bShow)
-                {
-                    Topmost = false;
-                }
-                else
-                {
-                    Topmost = true;
-                    IsFullScreenNow = true;
-                }
-            }
-
-            if (bShow)
-            {
-                IsFullScreenNow = false;
-            }
         }
 
         private void OnBtnPause()
@@ -423,6 +379,71 @@ namespace TheTimer
             dgr.Focus();
             // grd.Focus();
             FocusManager.SetFocusedElement(dgr, null);
+        }
+        #endregion
+
+
+        #region -> Full screen mode stuff
+        private bool IsFullScreenNow;
+        private bool MustReturnToFullScreen;
+
+        private void ToggleSurroundVisability()
+        {
+            bool bShow = sbMain.Visibility != Visibility.Visible;
+
+            ToggleSurroundVisability(bShow);
+        }
+
+        private void ToggleSurroundVisability(bool bShow)
+        {
+            sbMain.Visibility = bShow ? Visibility.Visible : Visibility.Collapsed;
+
+            firstColumn.Width = new GridLength(bShow ? 80 : 0);
+            this.WindowStyle = bShow ? WindowStyle.SingleBorderWindow : WindowStyle.None;
+
+            if (_config.TrueFullScreenMode)
+            {
+                this.WindowState = bShow ? WindowState.Normal : WindowState.Maximized;
+
+                if (bShow)
+                {
+                    this.Topmost = false;
+                }
+                else
+                {
+                    this.Topmost = true;
+                    IsFullScreenNow = true;
+                }
+            }
+
+            if (bShow)
+            {
+                IsFullScreenNow = false;
+            }
+
+            MustReturnToFullScreen = false;
+        }
+
+        protected override void OnDeactivated(EventArgs e)
+        {
+            base.OnDeactivated(e);
+
+            if (IsFullScreenNow)
+            {
+                ToggleSurroundVisability(true);
+                MustReturnToFullScreen = true;
+            }
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+
+            if (MustReturnToFullScreen)
+            {
+                ToggleSurroundVisability(false);
+                MustReturnToFullScreen = false;
+            }
         }
         #endregion
 
