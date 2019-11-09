@@ -216,11 +216,13 @@ namespace TheTimer
         {
             if (_timerItem.State == TimerState.Running)
             {
+                DisableActivationControl = true;
                 MessageBoxResult userDecision = MessageBox.Show(this,
                   $"Do you wish to{Environment.NewLine}restart The Timer?", "Think about it",
                   MessageBoxButton.YesNo, MessageBoxImage.Question);
+                DisableActivationControl = false;
 
-                if (userDecision == MessageBoxResult.No) { return; }
+                if (userDecision == MessageBoxResult.No) return;
             }
 
             _timerItem.Restart();
@@ -230,6 +232,7 @@ namespace TheTimer
         {
             Window wnd = new DlgSet()
             {
+                Owner = this,
                 DataContext = new DataToSet(_timerSet)
             };
 
@@ -386,6 +389,7 @@ namespace TheTimer
         #region -> Full screen mode stuff
         private bool IsFullScreenNow;
         private bool MustReturnToFullScreen;
+        private bool DisableActivationControl;
 
         private void ToggleSurroundVisability()
         {
@@ -396,11 +400,6 @@ namespace TheTimer
 
         private void ToggleSurroundVisability(bool bShow)
         {
-            sbMain.Visibility = bShow ? Visibility.Visible : Visibility.Collapsed;
-
-            firstColumn.Width = new GridLength(bShow ? 80 : 0);
-            this.WindowStyle = bShow ? WindowStyle.SingleBorderWindow : WindowStyle.None;
-
             if (_config.TrueFullScreenMode)
             {
                 this.WindowState = bShow ? WindowState.Normal : WindowState.Maximized;
@@ -416,6 +415,11 @@ namespace TheTimer
                 }
             }
 
+            sbMain.Visibility = bShow ? Visibility.Visible : Visibility.Collapsed;
+
+            firstColumn.Width = new GridLength(bShow ? 80 : 0);
+            this.WindowStyle = bShow ? WindowStyle.SingleBorderWindow : WindowStyle.None;
+
             if (bShow)
             {
                 IsFullScreenNow = false;
@@ -428,6 +432,8 @@ namespace TheTimer
         {
             base.OnDeactivated(e);
 
+            if (DisableActivationControl) return;
+
             if (IsFullScreenNow)
             {
                 ToggleSurroundVisability(true);
@@ -438,6 +444,8 @@ namespace TheTimer
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
+
+            if (DisableActivationControl) return;
 
             if (MustReturnToFullScreen)
             {

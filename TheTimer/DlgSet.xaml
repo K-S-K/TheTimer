@@ -4,25 +4,30 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TheTimer"
-         xmlns:timeControlBehavior="clr-namespace:TheTimer.TimeControlBehavior"
-       mc:Ignorable="d"
-        Title="DlgSet" Height="300" Width="400">
+        xmlns:timeControlBehavior="clr-namespace:TheTimer.TimeControlBehavior"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        Title="Set time" Height="195" Width="264">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="331*"/>
+            <ColumnDefinition Width="97*"/>
+        </Grid.ColumnDefinitions>
         <TextBox 
             Name="TimeTextBox"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="56"
-            Height="82" 
-            Width="143"
-            Margin="134,41,115,146" 
+            Height="83" 
+            Width="145"
+            Margin="10,10,43,71" 
             TextWrapping="Wrap" 
             timeControlBehavior:TimeSpanTextBoxBehaviour.MaxTime="23:59:59"
             timeControlBehavior:TimeSpanTextBoxBehaviour.TimeFormat="Minutes"
             timeControlBehavior:TimeSpanTextBoxBehaviour.Value="{Binding ElementName=TimeTextBlock, Path=Text, Mode=OneWayToSource}"  
             />
-        <Button IsEnabled="True" Content="Cancel" HorizontalAlignment="Left" Margin="33,176,0,0" VerticalAlignment="Top" Width="143" Click="OnBtnCancel" Height="55"/>
-        <Button IsEnabled="{Binding HasChanges}" Content="Apply" HorizontalAlignment="Left" Margin="226,176,0,0" VerticalAlignment="Top" Width="143" Click="OnBtnApply" Height="55"/>
-        <TextBlock Name="TimeTextBlock" Text="{Binding DurationString, Mode=TwoWay}" Visibility="Visible" HorizontalAlignment="Left" Height="16" Margin="134,139,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="91"/>
+        <Button IsEnabled="True" Content="Cancel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Width="75" Height="24" Click="OnBtnCancel" IsCancel="True" Grid.ColumnSpan="2"/>
+        <Button IsEnabled="{Binding HasChanges}" Content="Apply" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,43,10" Width="75" Height="24" Click="OnBtnApply"/>
+        <TextBlock Name="TimeTextBlock" Text="{Binding DurationString, Mode=TwoWay}" Visibility="Visible" HorizontalAlignment="Right" Height="16" Margin="0,98,97,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="91"/>
     </Grid>
 </Window>
