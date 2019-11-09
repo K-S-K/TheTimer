@@ -286,6 +286,7 @@ namespace TheTimer
                 if (gb == btnRst) sbiStateName.Text = "Restart The Timer awaiting again";
                 if (gb == btnSet) sbiStateName.Text = "Set The Timer duration time";
                 if (gb == btnCfg) sbiStateName.Text = "Configure The Timer";
+                if (gb == btnEsc) sbiStateName.Text = "Close The Timer";
 
                 gbFocused = gb;
             }
@@ -390,6 +391,7 @@ namespace TheTimer
         private bool IsFullScreenNow;
         private bool MustReturnToFullScreen;
         private bool DisableActivationControl;
+        private WindowState OriginalWindowState = WindowState.Normal;
 
         private void ToggleSurroundVisability()
         {
@@ -400,9 +402,31 @@ namespace TheTimer
 
         private void ToggleSurroundVisability(bool bShow)
         {
+            if (!bShow)
+            {
+                OriginalWindowState = this.WindowState;
+            }
+
+            sbMain.Visibility = bShow ? Visibility.Visible : Visibility.Collapsed;
+
+            firstColumn.Width = new GridLength(bShow ? 80 : 0);
+            this.WindowStyle = bShow ? WindowStyle.ThreeDBorderWindow : WindowStyle.None;
+
             if (_config.TrueFullScreenMode)
             {
-                this.WindowState = bShow ? WindowState.Normal : WindowState.Maximized;
+                if (bShow)
+                {
+                    this.WindowState = OriginalWindowState;
+                }
+                else
+                {
+                    if (this.WindowState == WindowState.Maximized)
+                    {
+                        this.WindowState = WindowState.Normal;
+                    }
+
+                    this.WindowState = WindowState.Maximized;
+                }
 
                 if (bShow)
                 {
@@ -414,11 +438,6 @@ namespace TheTimer
                     IsFullScreenNow = true;
                 }
             }
-
-            sbMain.Visibility = bShow ? Visibility.Visible : Visibility.Collapsed;
-
-            firstColumn.Width = new GridLength(bShow ? 80 : 0);
-            this.WindowStyle = bShow ? WindowStyle.SingleBorderWindow : WindowStyle.None;
 
             if (bShow)
             {
@@ -453,6 +472,7 @@ namespace TheTimer
                 MustReturnToFullScreen = false;
             }
         }
+
         #endregion
 
 

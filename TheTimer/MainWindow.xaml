@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TheTimer"
         mc:Ignorable="d"
+        WindowStyle="ThreeDBorderWindow"
         Title="The Timer" Height="650" Width="800" MinHeight="650" MinWidth="400">
 
     <Window.Resources>
@@ -218,14 +219,21 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Viewbox Grid.Row="0"  Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                        <Viewbox Grid.Row="0" 
+                                 Stretch="Uniform"
+                                 HorizontalAlignment="Stretch" 
+                                 VerticalAlignment="Stretch" 
+                                 >
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="col"/>
                                 </Grid.ColumnDefinitions>
 
                                 <!--<Image Source="Images/Btn_Go.png" Height="16"/>-->
-                                <TextBlock Name="txTimer" Grid.Column="0" Text="{Binding DurationString, Mode=OneWay}" FontWeight="Bold" />
+                                <TextBlock Name="txTimer" Grid.Column="0" FontWeight="Bold" 
+                                           Text="{Binding DurationString, Mode=OneWay}" 
+                                           Foreground="{Binding Path=StringColor}"
+                                           />
 
                             </Grid>
                         </Viewbox>

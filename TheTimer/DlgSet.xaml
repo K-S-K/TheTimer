@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:TheTimer"
         xmlns:timeControlBehavior="clr-namespace:TheTimer.TimeControlBehavior"
         mc:Ignorable="d"
+        ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner"
         Title="Set time" Height="195" Width="264">
     <Grid>

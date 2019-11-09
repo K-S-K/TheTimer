@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TheTimer.Settings"
         mc:Ignorable="d"
+        ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner"
         Title="The Timer Configuration" Height="160" Width="320">
     <Grid>
