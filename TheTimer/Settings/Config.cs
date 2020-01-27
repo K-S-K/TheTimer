@@ -16,6 +16,7 @@ namespace TheTimer.Settings
         private string _originalContent;
 
         private bool _trueFullScreenMode;
+        private bool _darkColorScheme;
         #endregion
 
 
@@ -33,6 +34,22 @@ namespace TheTimer.Settings
                 _trueFullScreenMode = value;
                 UpdateProperty(nameof(Modifyed));
                 UpdateProperty(nameof(TrueFullScreenMode));
+            }
+        }
+
+        public bool DarkColorScheme
+        {
+            get { return _darkColorScheme; }
+            set
+            {
+                if (_darkColorScheme == value)
+                {
+                    return;
+                }
+
+                _darkColorScheme = value;
+                UpdateProperty(nameof(Modifyed));
+                UpdateProperty(nameof(DarkColorScheme));
             }
         }
 
@@ -64,6 +81,11 @@ namespace TheTimer.Settings
             }
 
             {
+                rk = GetRegistryKey("Looking");
+                rk.SetValue(nameof(DarkColorScheme), DarkColorScheme);
+            }
+
+            {
                 // rk = GetRegistryKey("Another");
                 // rk.SetValue("DBConnection", DB.XContent.ToString());
             }
@@ -83,6 +105,11 @@ namespace TheTimer.Settings
             {
                 rk = GetRegistryKey("Behavior");
                 TrueFullScreenMode = bool.Parse(rk.GetValue(nameof(TrueFullScreenMode), true).ToString());
+            }
+
+            {
+                rk = GetRegistryKey("Looking");
+                DarkColorScheme = bool.Parse(rk.GetValue(nameof(DarkColorScheme), false).ToString());
             }
 
             Modifyed = false;
@@ -110,6 +137,9 @@ namespace TheTimer.Settings
                 XElement xeBH = new XElement("Behavior"); xe.Add(xeBH);
                 xeBH.Add(new XElement(nameof(TrueFullScreenMode), TrueFullScreenMode));
 
+                XElement xeLK = new XElement("Looking"); xe.Add(xeLK);
+                xeLK.Add(new XElement(nameof(DarkColorScheme), DarkColorScheme));
+
                 return xe;
             }
             set
@@ -121,6 +151,12 @@ namespace TheTimer.Settings
                 {
                     try { TrueFullScreenMode = bool.Parse(xeBH.Element(nameof(TrueFullScreenMode)).Value); }
                     catch (Exception) { TrueFullScreenMode = true; }
+                }
+
+                XElement xeLK = value.Element("Looking"); if (xeBH != null)
+                {
+                    try { DarkColorScheme = bool.Parse(xeLK.Element(nameof(DarkColorScheme)).Value); }
+                    catch (Exception) { DarkColorScheme = false; }
                 }
 
                 Modifyed = false;

@@ -30,7 +30,7 @@ namespace TheTimer
         {
             if (DataContext is DataToSet data)
             {
-                TimeTextBox.Text = data.Duration.ToString(@"hh\:mm");
+                TimeTextBox.Text = data.Duration.ToString(@"hh\:mm\:ss");
             }
         }
 

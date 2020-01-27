@@ -10,6 +10,7 @@
         Title="The Timer Configuration" Height="160" Width="320">
     <Grid>
         <CheckBox IsChecked="{Binding TrueFullScreenMode}" Content="TrueFullScreenMode" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,16,0,0"/>
+        <CheckBox IsChecked="{Binding DarkColorScheme}" Content="DarkColorScheme" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,46,0,0"/>
         <Button IsEnabled="{Binding Modifyed}" Content="Apply" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="75" Height="24" Click="OnBtnApp" />
         <Button IsEnabled="True" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Height="24" Click="OnBtnEsc" IsCancel="True" />
     </Grid>

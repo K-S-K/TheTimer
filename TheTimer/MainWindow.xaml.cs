@@ -15,6 +15,9 @@ namespace TheTimer
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// <remarks>
+    /// https://github.com/K-S-K/TheTimer/actions/new
+    /// </remarks>
     public partial class MainWindow : Window
     {
         #region -> Data
@@ -259,6 +262,8 @@ namespace TheTimer
 
             _config.XContent = dlg.Config.XContent;
             _config.SaveProgramConfigToRegistry();
+
+            _timerViewData.SetPalette(_config.DarkColorScheme);
         }
 
         private void OnBtnEsc()
@@ -540,6 +545,7 @@ namespace TheTimer
             InitializeComponent();
 
             DataContext = _timerViewData;
+            _timerViewData.SetPalette(_config.DarkColorScheme);
 
             styleHover = LoadStaticWindowResourceStyle("MainViewContentSelector_Hover");
             styleLeave = LoadStaticWindowResourceStyle("MainViewContentSelector_Leave");

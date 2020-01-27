@@ -14,7 +14,7 @@ namespace TheTimer
     {
         private enum ContentType { Unknown = 0, Balancer, Sessions }
 
-        #region -> Cocumentation
+        #region -> Documentation
         /// <summary>
         /// Color names
         /// http://blog.analogmachine.org/wp-content/uploads/2012/09/DelphiColorPalette.png
